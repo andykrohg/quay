@@ -8,8 +8,7 @@ ENV OS=linux \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8 \
-    PIP_NO_CACHE_DIR=off
+    LANG=C.UTF-8
 
 ENV QUAYDIR /quay-registry
 ENV QUAYCONF /quay-registry/conf
@@ -28,6 +27,7 @@ RUN INSTALL_PKGS="\
         python3-gpg \
         dnsmasq \
         memcached \
+        nodejs \
         openssl \
         skopeo \
         " && \
@@ -38,8 +38,8 @@ RUN INSTALL_PKGS="\
 COPY . .
 
 RUN alternatives --set python /usr/bin/python3 && \
-    python -m pip install --upgrade setuptools pip && \
-    python -m pip install -r requirements.txt --no-cache && \
+    python -m pip install --no-cache-dir --upgrade setuptools pip && \
+    python -m pip install --no-cache-dir -r requirements.txt --no-cache && \
     python -m pip freeze && \
     mkdir -p $QUAYDIR/static/webfonts && \
     mkdir -p $QUAYDIR/static/fonts && \
@@ -49,14 +49,9 @@ RUN alternatives --set python /usr/bin/python3 && \
     cp -r $QUAYDIR/static/fonts $QUAYDIR/config_app/static/fonts && \
     cp -r $QUAYDIR/static/webfonts $QUAYDIR/config_app/static/webfonts
 
-RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
-    yum install -y nodejs && \
-    curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
-    rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg && \
-    yum install -y yarn && \
-    yarn install --ignore-engines && \
-    yarn build && \
-    yarn build-config-app
+RUN npm install --ignore-engines && \
+    npm run build && \
+    npm run build-config-app
 
 
 ENV JWTPROXY_VERSION=0.0.3
