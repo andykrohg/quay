@@ -22,7 +22,6 @@ DEFAULT_MESSAGE[501] = "Not Implemented"
 def _abort(status_code, data_object, description, headers):
     # Add CORS headers to all errors
     options_resp = current_app.make_default_options_response()
-    headers["Access-Control-Allow-Origin"] = "*"
     headers["Access-Control-Allow-Methods"] = options_resp.headers["allow"]
     headers["Access-Control-Max-Age"] = str(21600)
     headers["Access-Control-Allow-Headers"] = ["Authorization", "Content-Type"]

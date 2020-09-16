@@ -71,7 +71,6 @@ def render_page_template(name, route_data=None, js_bundle_name=DEFAULT_JS_BUNDLE
     )
 
     resp = make_response(contents)
-    resp.headers["X-FRAME-OPTIONS"] = "ALLOW"
     return resp
 
 
