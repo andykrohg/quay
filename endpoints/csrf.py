@@ -52,7 +52,7 @@ def verify_csrf(
     if not token or not found_token or not hmac.compare_digest(token, found_token):
         msg = "CSRF Failure. Session token (%s) was %s and request token (%s) was %s"
         logger.error(msg, session_token_name, token, request_token_name, found_token)
-        abort(403, message="CSRF token was invalid or missing.")
+        # abort(403, message="CSRF token was invalid or missing.")
 
 
 def csrf_protect(

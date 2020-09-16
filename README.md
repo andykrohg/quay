@@ -1,4 +1,22 @@
-# Project Quay
+# Project Quay 
+
+## Workshops
+
+This fork makes a few modifications to Quay to allow it to be loaded inside an HTML iFrame for compatibility with the [RedHatGov workshop-dashboard](https://github.com/redhatgov/workshop-dashboard).
+
+**Instructions**
+1. Install Quay on a 4.x cluster using the operator
+2. Build and push a new `quay` image
+```bash
+QUAY_ACCOUNT=<your_user>
+docker build -f Dockerfile . -t quay.io/$QUAY_ACCOUNT/quay
+docker login quay.io
+docker push quay.io/$QUAY_ACCOINT/quay
+```
+3. Patch your quay deployment
+```bash
+oc patch deployments/quayecosystem-quay -n quay-enterprise -p '{"spec":{"template":{"spec":{"containers":[{"name":"quay-enterprise-app","image":"quay.io/$QUAY_ACCOUNT/quay:latest"}]}}}}'
+```
 
 ![CI](https://github.com/quay/quay/workflows/CI/badge.svg?branch=master)
 [![Container Repository on Quay](https://quay.io/repository/projectquay/quay/status "Container Repository on Quay")](https://quay.io/repository/projectquay/quay)

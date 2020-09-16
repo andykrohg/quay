@@ -162,5 +162,5 @@ def render_page_template(name, route_data=None, **kwargs):
     )
 
     resp = make_response(contents)
-    resp.headers["X-FRAME-OPTIONS"] = "DENY"
+    resp.headers["X-FRAME-OPTIONS"] = "ALLOW"
     return resp
